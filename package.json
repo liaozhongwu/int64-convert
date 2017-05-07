@@ -1,0 +1,25 @@
+{
+  "name": "int64-convert",
+  "version": "0.0.1",
+  "description": "convert int64 number between two scales",
+  "author": {
+    "name": "liaozhongwu",
+    "email": "liaozhongwu95@gmail.com"
+  },
+  "keywords": [
+    "int64",
+    "convert"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/liaozhongwu/int64-convert"
+  },
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "test": "mocha test --use_strict"
+  },
+  "devDependencies": {
+    "mocha": "^3.3.0"
+  }
+}
