@@ -34,4 +34,12 @@ describe('hex2decimal', function() {
 		assert.equal(res, '9223372036854775807');
 		done();
 	});
+
+	it('shold work from decimal to hex with fullfill', function (done) {
+		var res = convert('12345', 10, 16);
+		assert.equal(res, '3039');
+		res = convert('12345', 10, 16, true);
+		assert.equal(res, '0000000000003039');
+		done();
+	});
 });

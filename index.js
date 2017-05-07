@@ -76,12 +76,13 @@
    * @params {String} number string
    * @params {Number} from scale
    * @params {Number} to scale
+   * @params {Boolean} fullfill int64 value
    * @return {String} converted number string
    */
-  function convert(src, fromScale, toScale) {
+  function convert(src, fromScale, toScale, fullfill) {
     fromScale = fromScale || 10;
     toScale = toScale || 16;
-    var result = '';
+    var result = fullfill ? '0000000000000000' : '';
     var n;
     var rate = '1';
     var i = 0;
