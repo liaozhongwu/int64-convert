@@ -1,6 +1,6 @@
 {
   "name": "int64-convert",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "convert int64 number between two scales",
   "author": {
     "name": "liaozhongwu",

@@ -2,6 +2,29 @@
 
 (function () {
   /*
+   * @desc trim number string, remove front zero
+   * @params {String} number string
+   * @return {String} trimed number string
+   */
+  function trim(str) {
+    while(str[0] === '0') {
+      str = str.slice(1);
+    }
+    return str;
+  }
+  /*
+   * @desc polish number string, add front zero
+   * @params {String} number string
+   * @params {Number} target length
+   * @return {String} polished number string
+   */
+  function polish(str, len) {
+    while(str.length < len) {
+      str = '0' + str;
+    }
+    return str;
+  }
+  /*
    * @desc add two number string
    * @params {String} first number string
    * @params {String} second number string
@@ -79,10 +102,11 @@
    * @params {Boolean} fullfill int64 value
    * @return {String} converted number string
    */
-  function convert(src, fromScale, toScale, fullfill) {
+  function convert(src, fromScale, toScale, polishLen) {
+    src = trim(src);
     fromScale = fromScale || 10;
     toScale = toScale || 16;
-    var result = fullfill ? '0000000000000000' : '';
+    var result = '0';
     var n;
     var rate = '1';
     var i = 0;
@@ -90,6 +114,9 @@
       n = multiply(rate, parseInt(src[src.length - i], fromScale), toScale);
       result = add(result, n, toScale);
       rate = multiply(rate, fromScale, toScale);
+    }
+    if (polishLen) {
+      return polish(result, polishLen);
     }
     return result;
   }
