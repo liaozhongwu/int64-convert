@@ -48,4 +48,9 @@ describe('hex2decimal', function() {
 		assert.equal(res, '0000000012345678');
 		done();
 	});
+	it('shold work with invalid char', function (done) {
+		var res = convert('9223372z368547758z7', 10, 16);
+		assert.equal(res, '7fffffffffffffff');
+		done();
+	});
 });

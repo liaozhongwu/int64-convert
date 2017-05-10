@@ -25,6 +25,16 @@
     return str;
   }
   /*
+   * @desc convert char to number
+   * @params {String} number char
+   * @params {Number} scale
+   * @return {Number} polished number string
+   */
+  function toNumber(char, scale) {
+    var num = parseInt(char, scale);
+    return isNaN(num) ? 0 : num;
+  }
+  /*
    * @desc add two number string
    * @params {String} first number string
    * @params {String} second number string
@@ -41,21 +51,21 @@
     var i = 0;
     while(i < firlen && i < seclen) {
       i++;
-      n = parseInt(firstr[firlen - i], scale) + parseInt(secstr[seclen - i], scale) + carry;
+      n = toNumber(firstr[firlen - i], scale) + toNumber(secstr[seclen - i], scale) + carry;
       carry = Math.floor(n / scale);
       remainder = n % scale;
       result = remainder.toString(scale) + result;
     }
     while(i < firlen) {
       i++;
-      n = parseInt(firstr[firlen - i], scale) + carry;
+      n = toNumber(firstr[firlen - i], scale) + carry;
       carry = Math.floor(n / scale);
       remainder = n % scale;
       result = remainder.toString(scale) + result;
     }
     while(i < seclen) {
       i++;
-      n = parseInt(secstr[seclen - i], scale) + carry;
+      n = toNumber(secstr[seclen - i], scale) + carry;
       carry = Math.floor(n / scale);
       remainder = n % scale;
       result = remainder.toString(scale) + result;
@@ -81,7 +91,7 @@
     var remainder;
     var i = str.length;
     while(--i >= 0) {
-      n = parseInt(str[i], scale) * multiplier + carry;
+      n = toNumber(str[i], scale) * multiplier + carry;
       carry = Math.floor(n / scale);
       remainder = n % scale;
       result = remainder.toString(scale) + result;
@@ -111,7 +121,7 @@
     var rate = '1';
     var i = 0;
     while(i++ < src.length) {
-      n = multiply(rate, parseInt(src[src.length - i], fromScale), toScale);
+      n = multiply(rate, toNumber(src[src.length - i], fromScale), toScale);
       result = add(result, n, toScale);
       rate = multiply(rate, fromScale, toScale);
     }
