@@ -7,7 +7,7 @@
    * @return {String} trimed number string
    */
   function trim(str) {
-    while(str[0] === '0') {
+    while(str[0] === '0' && str.length > 1) {
       str = str.slice(1);
     }
     return str;
@@ -31,8 +31,41 @@
    * @return {Number} polished number string
    */
   function toNumber(char, scale) {
+    if (!char) {
+      return 0;
+    }
     var num = parseInt(char, scale);
-    return isNaN(num) ? 0 : num;
+    if (isNaN(num)) {
+      throw new Error("parse char '" + char + "' to number(" + scale + ") failed");
+    }
+    return num;
+  }
+  /*
+   * @desc compare two number string
+   * @params {String} first number string
+   * @params {String} second number string
+   * @params {Number} scale
+   * @return {Number} 1 0 -1
+   */
+  function compare(firstr, secstr, scale) {
+    if (firstr.length > secstr.length) {
+      return 1;
+    } else if (firstr.length < secstr.length) {
+      return -1;
+    } else {
+      var i = 0;
+      while(i < firstr.length) {
+        var fn = toNumber(firstr[i], scale);
+        var sn = toNumber(secstr[i], scale)
+        if (fn > sn) {
+          return 1;
+        } else if (fn < sn) {
+          return -1;
+        }
+        i++;
+      }
+    }
+    return 0;
   }
   /*
    * @desc add two number string
@@ -49,23 +82,9 @@
     var carry = 0;
     var remainder;
     var i = 0;
-    while(i < firlen && i < seclen) {
+    while(i < firlen || i < seclen) {
       i++;
       n = toNumber(firstr[firlen - i], scale) + toNumber(secstr[seclen - i], scale) + carry;
-      carry = Math.floor(n / scale);
-      remainder = n % scale;
-      result = remainder.toString(scale) + result;
-    }
-    while(i < firlen) {
-      i++;
-      n = toNumber(firstr[firlen - i], scale) + carry;
-      carry = Math.floor(n / scale);
-      remainder = n % scale;
-      result = remainder.toString(scale) + result;
-    }
-    while(i < seclen) {
-      i++;
-      n = toNumber(secstr[seclen - i], scale) + carry;
       carry = Math.floor(n / scale);
       remainder = n % scale;
       result = remainder.toString(scale) + result;
@@ -77,6 +96,35 @@
     }
     return result;
   }
+  /*
+   * @desc sub two number string
+   * @params {String} first number string
+   * @params {String} second number string
+   * @params {Number} scale
+   * @return {String} subed number string
+   */
+  function sub(firstr, secstr, scale) {
+    if (compare(firstr, secstr, scale) < 0) {
+      return sub(secstr, firstr, scale);
+    }
+    var result = '';
+    var firlen = firstr.length;
+    var seclen = secstr.length;
+    var n;
+    var carry = 0;
+    var i = 0;
+    while(i < firlen) {
+      i++;
+      n = toNumber(firstr[firlen - i], scale) - toNumber(secstr[seclen - i], scale) + carry;
+      if (n < 0) {
+        carry = -1;
+        n = n + scale;
+      }
+      result = n.toString(scale) + result;
+    }
+    return trim(result);
+  }
+
   /*
    * @desc multiply number string
    * @params {String} number string multiplicand
@@ -103,7 +151,6 @@
     }
     return result;
   }
-
   /*
    * @desc convert number string from scale to scale
    * @params {String} number string
@@ -129,6 +176,18 @@
       return polish(result, polishLen);
     }
     return result;
+  }
+
+  convert.signedHexToDec = function (src) {
+    var negate = src.length > 15 && toNumber(src[0], 16) >= 8;
+    var result = convert(negate ? sub('10000000000000000', src, 16) : src, 16, 10);
+    return negate ? '-' + result : result;
+  }
+
+  convert.signedDecToHex = function (src, polishLen) {
+    var negate = src[0] === '-';
+    var result = convert(negate ? src.slice(1) : src, 10, 16, polishLen)
+    return negate ? sub('10000000000000000', result, 16) : result;
   }
   /*
    * @export

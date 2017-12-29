@@ -6,14 +6,16 @@ convert int64 number (display as string) between two scales
 
 ## Installation
 
-```	
+``` 
 npm install int64-convert
 ```
 
 ## Examples
 
-```js	
+```js 
 var convert = require("int64-convert");
+
+// unsigned
 convert('7fffffffffffffff', 16, 10); // '9223372036854775807'
 convert('9223372036854775807', 10, 16); // '7fffffffffffffff'
 convert('7fffffffffffffff', 16, 2); // '111111111111111111111111111111111111111111111111111111111111111'
@@ -22,6 +24,11 @@ convert('9223372036854775807', 10, 2); // '1111111111111111111111111111111111111
 // polish int64 value
 convert('4660', 10, 16, 8); // '00001234'
 convert('4660', 10, 16, 16); // '0000000000001234'
+
+// signed
+convert.signedHexToDec('ffffffffffffffff'); // '-1'
+convert.signedDecToHex('-1'); // 'ffffffffffffffff'
+
 ```
 
 ## Tests
